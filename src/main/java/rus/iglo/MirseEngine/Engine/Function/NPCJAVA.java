@@ -7,6 +7,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import rus.iglo.MirseEngine.Engine.Action;
 import rus.iglo.MirseEngine.Engine.Distanse;
 import rus.iglo.MirseEngine.Engine.npc.ModEntityTypes;
 import rus.iglo.MirseEngine.Engine.npc.custom.NPCEntity;
@@ -117,9 +118,9 @@ public class NPCJAVA {
     public double getZ() {
         return npcEntity.getZ();
     }
-    public void performActionBeforeDistance(Runnable runnable,int d) {
+    public void performActionBeforeDistance(Action action, int d) {
         Distanse.setRot(() -> {
-            runnable.run();
+            action.execute();
         },d);
     }
     public void sendMessage(String text) {

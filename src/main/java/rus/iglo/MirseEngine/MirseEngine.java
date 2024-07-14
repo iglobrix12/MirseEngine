@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -45,6 +46,9 @@ public class MirseEngine {
         @SubscribeEvent
         public static void inz(PlayerEvent.PlayerLoggedInEvent event) {
             serverPlayer = (ServerPlayer) event.getEntity();
+        }
+        @SubscribeEvent
+        public static void e(BlockEvent.BreakEvent event) {
             Scripts.execute();
         }
     }

@@ -1,19 +1,21 @@
 package rus.iglo.MirseEngine.Engine.Dialog;
 
-public class Rest {
-    private final String name;
-    private final Runnable action;
+import rus.iglo.MirseEngine.Engine.Action;
 
-    public Rest(String name, Runnable action) {
-        this.name = name;
+public class Rest {
+    private final String label;
+    private final Action action;
+
+    public Rest(String label, Action action) {
+        this.label = label;
         this.action = action;
     }
 
     public String getLabel() {
-        return name;
+        return label;
     }
 
-    public Runnable getAction() {
+    public Action getAction() {
         return action;
     }
 }

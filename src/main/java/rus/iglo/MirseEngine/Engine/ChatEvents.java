@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Mod.EventBusSubscriber
 public class ChatEvents {
-    public static Map<String, Runnable> taskMap = new HashMap<>();
+    public static Map<String, Action> taskMap = new HashMap<>();
 
     @SubscribeEvent
     public static void onClientChat(ClientChatEvent event) {

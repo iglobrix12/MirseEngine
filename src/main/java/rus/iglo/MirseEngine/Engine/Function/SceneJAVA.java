@@ -10,6 +10,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
+import rus.iglo.MirseEngine.Engine.Action;
 import rus.iglo.MirseEngine.Engine.ChatEvents;
 import rus.iglo.MirseEngine.MirseEngine;
 
@@ -24,7 +25,7 @@ import static rus.iglo.MirseEngine.MirseEngine.MODID;
 @Mod.EventBusSubscriber(modid = MODID)
 public class SceneJAVA {
     private static final Queue<DelayedTask> taskQueue = new ConcurrentLinkedQueue<>();
-    public static void scheduleDelayedTask(Runnable action, long delay, TimeUnit timeUnit) {
+    public static void scheduleDelayedTask(Action action, long delay, TimeUnit timeUnit) {
         long delayTicks = timeUnit.toSeconds(delay) * 20;
         taskQueue.add(new DelayedTask(action, delayTicks));
     }
@@ -42,10 +43,10 @@ public class SceneJAVA {
         }
     }
     private static class DelayedTask {
-        private final Runnable action;
+        private final Action action;
         private long delayTicks;
 
-        public DelayedTask(Runnable action, long delayTicks) {
+        public DelayedTask(Action action, long delayTicks) {
             this.action = action;
             this.delayTicks = delayTicks;
         }
@@ -59,31 +60,31 @@ public class SceneJAVA {
         }
 
         public void run() {
-            action.run();
+            action.execute();
         }
     }
-    public void addScenetimer(Runnable runnable,int timer) {
-        scheduleDelayedTask(runnable,timer,TimeUnit.SECONDS);
+    public void addScenetimer(Action action,int timer) {
+        scheduleDelayedTask(action,timer,TimeUnit.SECONDS);
     }
-    public void playScene(Runnable runnable) {
-        scheduleDelayedTask(runnable,1, TimeUnit.MILLISECONDS);
+    public void playScene(Action action) {
+        scheduleDelayedTask(action,1, TimeUnit.MILLISECONDS);
     }
-    private static final List<Runnable> list = new ArrayList<>();
+    private static final List<Action> list = new ArrayList<>();
     private static int in = 0;
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key inputEvent) {
         if (DRINKING_KEY.consumeClick()) {
             if (in < list.size()) {
-                Runnable currentRunnable = list.get(in);
-                currentRunnable.run();
+                Action action = list.get(in);
+                action.execute();
                 in++;
             }
         }
     }
 
-    public void addSceneKey(Runnable runnable) {
-        list.add(runnable);
+    public void addSceneKey(Action action) {
+        list.add(action);
     }
     @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
@@ -97,7 +98,7 @@ public class SceneJAVA {
 
     public static final KeyMapping DRINKING_KEY = new KeyMapping(KEY_DRINK_WATER, KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, KEY_CATEGORY_TUTORIAL);
-    public void addChatTask(Runnable task, String keyword) {
+    public void addChatTask(Action task, String keyword) {
         ChatEvents.taskMap.put(keyword, task);
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = MirseEngine.MODID)
 public class Distanse {
     private static int DISTANCE_THRESHOLD = 0;
-    private static List<Runnable> runnablestclic = new ArrayList<>();
+    private static List<Action> actionArrayList = new ArrayList<>();
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
@@ -27,7 +27,7 @@ public class Distanse {
                         NPCEntity npc = (NPCEntity) entity;
                         double distance = player.distanceToSqr(npc);
                         if (distance <= DISTANCE_THRESHOLD * DISTANCE_THRESHOLD) {
-                            executeRunnables();
+                            executeAction();
                         }
                         return true;
                     }
@@ -37,16 +37,16 @@ public class Distanse {
         }
     }
 
-    public static void setRot(Runnable runnable,int d) {
-        runnablestclic.add(runnable);
+    public static void setRot(Action action,int d) {
+        actionArrayList.add(action);
         DISTANCE_THRESHOLD = d;
     }
 
-    private static void executeRunnables() {
-        Iterator<Runnable> iterator = runnablestclic.iterator();
+    private static void executeAction() {
+        Iterator<Action> iterator = actionArrayList.iterator();
         while (iterator.hasNext()) {
-            Runnable runnable = iterator.next();
-            runnable.run();
+            Action action = iterator.next();
+            action.run();
             iterator.remove();
         }
     }
